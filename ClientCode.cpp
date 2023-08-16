@@ -8,9 +8,13 @@ void ClientCode::start()
 
 	while (flag)
 	{
-		if (user != nullptr)
+		if (user == nullptr)
 		{
-			std::cout << "\nThe current observer:"
+			std::cout << "\nThere is no current user. ";
+		}
+		else
+		{
+			std::cout << "\nThe current user:"
 				<< "\nname - " << user->get_name()
 				<< "\nlogin - " << user->get_login()
 				<< "\nuser_ID - " << user->get_userID();
@@ -36,13 +40,28 @@ void ClientCode::start()
 		}
 		case '3':
 		{
-			std::cout << "message \n";
-			//user->send_message();
+			if (user == nullptr)
+			{
+				std::cout << "\nYou have to log in!";
+			}
+			else
+			{
+				std::cout << "message \n";
+				//user->send_message();
+			}
 			break;
 		}
 		case '4':
 		{
-			user->leave_chat(chat);		//Õ≈ –¿¡Œ“¿≈“! »— Àﬁ◊≈Õ»≈!!!!
+			if (user == nullptr)
+			{
+				std::cout << "\nYou have to log in!";				
+			}
+			else
+			{
+				user->leave_chat(chat);	
+				user = nullptr;
+			}
 			break;
 		}
 		case '5':
