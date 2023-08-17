@@ -5,8 +5,7 @@
 User::User(Chat* chat)
 	: chat_(chat)
 {
-	chat_->set_User(this);
-	chat->attach(this);	
+	chat_->set_User(this);	
 }
 
 User* User::log_in(Chat* chat)
@@ -49,7 +48,6 @@ User* User::log_in(Chat* chat)
 
 void User::create_message() {
 	char event;
-
 	while (true)
 	{
 		std::cout << "\nEnter an action: s - send to all users, c - chose some user, q - quit: ";		
@@ -70,25 +68,21 @@ void User::create_message() {
 	}	
 }
 
-void User::update(std::string message)
+void User::update(IObserver* sender, std::string message)
 {
-	messages_.push_back(message);
+	messages_.insert({ sender, message });
 }
 
 void User::display_Messages()
 {
 	if (messages_.empty())
 	{
-		std::cout << "No Messages!\n";
+		std::cout << "No messages!\n";
 	}
-	else
+	for (auto msg : messages_)
 	{
-		for (std::string msg : messages_)
-		{
-			std::cout << "The message: " << msg << "\n";
-			std::cout << "The message received from user: " << chat_->show_Sender(msg) << "\n\n";
-			return;
-		}		
+			std::cout << "The message received from user: "  << msg.first->get_login() << "\n";
+			std::cout << "The message: "<< msg.second << "\n\n";
 	}
 }
 

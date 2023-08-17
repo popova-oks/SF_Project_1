@@ -9,7 +9,7 @@ public:
 	User(Chat* chat);
 	virtual ~User() {}
 	
-	void update(std::string message) override;
+	void update(IObserver* sender, std::string message) override;
 
 	std::string& get_name() override { return name_; }
 	std::string& get_login() override { return login_; }
@@ -36,7 +36,10 @@ private:
 	std::string password_{};
 	int user_ID_ {0};
 	bool is_autorization_{ false };
-	std::list <std::string> messages_{};
+
+	//std::list <std::string> messages_{};
+	std::multimap <IObserver*, std::string> messages_{};
+
 	static int static_counter;	
 };
 

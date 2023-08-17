@@ -25,7 +25,7 @@ void Chat::set_User(IObserver* observer)
 void Chat::attach(IObserver* observer)
 {		
 	list_observers_.push_back(observer);
-	std::cout << "\nYou are logged into the chat! \nIf you want to exit the chat, enter - 4.\n";
+	std::cout << "\nYou are logged into the chat!\n";
 }
 
 void Chat::notify(IObserver* sender, char event)
@@ -56,7 +56,7 @@ void Chat::notify(IObserver* sender, char event)
 			{
 				if (sender != user)
 				{
-					user->update(message);
+					user->update(sender, message);
 					messages_->msg_.insert({ message, sender });
 				}
 			}			
@@ -76,7 +76,7 @@ void Chat::notify(IObserver* sender, char event)
 			else
 			{
 				std::cout << "Your message is sending!\n";
-				user->update(message);
+				user->update(sender, message);
 				messages_->msg_.insert({ message, sender });
 			}			
 		}

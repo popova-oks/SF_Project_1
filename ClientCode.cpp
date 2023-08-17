@@ -128,8 +128,8 @@ User* ClientCode::make_user(Chat* chat)
 		user->set_password (password);
 		user->set_userID ();
 		user->set_isAutorization();
-
-		std::cout << "\nHi, You are new User! name - " << user->get_name() << " : " <<"ID - " << user->get_userID();		
+		std::cout << "\nHi, You are new User! name - " << user->get_name() << " : " <<"ID - " << user->get_userID();
+		chat->attach(user);
 	}
 	return user;
 }
