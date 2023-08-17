@@ -8,6 +8,7 @@ class Messages		//все функции и поля класса доступн�
 public:
 	virtual ~Messages() {};
 	Messages() {};
+	IObserver* get_Sender(std::string message);
 	std::multimap <std::string, IObserver*> msg_{};
 };
 	

@@ -5,5 +5,6 @@ class ClientCode
 {
 public:
 	void start();
+	User* make_user(Chat* chat);
 };
 

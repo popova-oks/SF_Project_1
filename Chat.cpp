@@ -30,51 +30,72 @@ void Chat::attach(IObserver* observer)
 
 void Chat::notify(IObserver* sender, char event)
 {
-	std::cout << "\n\nEnter your message: ";
-	std::string message;
-	std::cin >> message;
-
-	if (messages_ == nullptr)
+	if (list_observers_.empty())
 	{
-		messages_ = new Messages;
+		return;
 	}
-
-	std::list<IObserver*>::iterator iterator = list_observers_.begin();
-	if (event == 's')
+	else
 	{
-		std::cout << "Your messages are sending\n";
-		while (iterator != list_observers_.end()) {
-			(*iterator)->update(message);
-			messages_->msg_.insert({ message, sender });
-			++iterator;
-		}
-	}
-	else if (event == 'c')
-	{
-		std::cout << "Enter name or login: ";
-		std::string name;
-		std::cin >> name;
+		std::cout << "\nEnter your message: ";
 
-		while (iterator != list_observers_.end())
+		//сбросить все символы из потока
+		std::cin.clear();
+		std::cin.ignore(32767, '\n');
+
+		std::string message;
+		//std::cin >> message;
+		std::getline(std::cin, message);
+
+		if (messages_ == nullptr)
 		{
-			if (((*iterator)->get_name() == name) || ((*iterator)->get_login() == name))
+			messages_ = new Messages;
+		}		
+		if (event == 's')
+		{
+			for (IObserver* user : list_observers_)
 			{
-				std::cout << "Your message is sending\n";
-				(*iterator)->update(message);
-				messages_->msg_.insert({ message, sender });
-
-				//сбросить все символы из потока
-				std::cin.clear();
-				std::cin.ignore(32767, '\n');
-				return;
-			}
-			++iterator;
+				if (sender != user)
+				{
+					user->update(message);
+					messages_->msg_.insert({ message, sender });
+				}
+			}			
+			std::cout << "Your messages are sending!\n";			
 		}
-		std::cout << "\nSuch user wasn't found! Try agan!";
+		else if (event == 'c')
+		{
+			std::cout << "Enter login to send message: ";
+			std::string login;
+			std::cin >> login;
+
+			IObserver* user = find_user(login);
+			if (user == nullptr)
+			{
+				std::cout << "\nSuch user wasn't found! Try agan!";
+			}
+			else
+			{
+				std::cout << "Your message is sending!\n";
+				user->update(message);
+				messages_->msg_.insert({ message, sender });
+			}			
+		}
 	}
-	//сбросить все символы из потока
-	std::cin.clear();
-	std::cin.ignore(32767, '\n');
+}
+
+std::string Chat::show_Sender(std::string message)
+{
+	IObserver* sender = messages_->get_Sender(message);
+	std::string str;
+	if (sender == nullptr)
+	{
+		str = "The sender is not found!";		
+	}
+	else
+	{
+		str = sender->get_login();
+	}
+	return str;
 }
 
 void Chat::detach(IObserver* observer)

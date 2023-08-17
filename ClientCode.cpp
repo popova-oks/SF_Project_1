@@ -29,7 +29,7 @@ void ClientCode::start()
 		{
 		case '1':
 		{
-			user = new User(chat);
+			user = make_user(chat);
 			break;
 		}
 		case '2':
@@ -38,6 +38,7 @@ void ClientCode::start()
 			if (chat->is_Users())
 			{
 				user = user->log_in(chat);
+				user->display_Messages();
 			}
 			else
 			{
@@ -47,13 +48,21 @@ void ClientCode::start()
 		}
 		case '3':
 		{
+			chat->display_listObservers();
 			if (user == nullptr)
 			{
 				std::cout << "\nYou need to log in!";
 			}
 			else
 			{
-				user->create_message();
+				if (chat->is_Observes())
+				{
+					user->create_message();
+				}
+				else
+				{
+					std::cout << "\nNo authorized users!\n";
+				}				
 			}
 			break;
 		}
@@ -88,4 +97,39 @@ void ClientCode::start()
 	std::cout << "\nSee you soon agan! " << std::endl;
 
 	delete chat;
+}
+
+User* ClientCode::make_user(Chat* chat)
+{
+	std::string name;
+	std::cout << "\nEnter your name: ";
+	std::cin >> name;
+
+	std::string login;
+	std::cout << "Enter your username: ";
+	std::cin >> login;
+
+	std::string password;
+	std::cout << "Enter your password: ";
+	std::cin >> password;
+
+	User* user = dynamic_cast<User*> (chat->find_user(login));
+
+	if (user != nullptr)
+	{
+		std::cout << "\nThis user was registrated!\n";
+	}
+	else
+	{
+		user = new User(chat);
+		
+		user->set_name (name);
+		user->set_login(login);
+		user->set_password (password);
+		user->set_userID ();
+		user->set_isAutorization();
+
+		std::cout << "\nHi, You are new User! name - " << user->get_name() << " : " <<"ID - " << user->get_userID();		
+	}
+	return user;
 }
