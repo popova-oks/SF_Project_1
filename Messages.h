@@ -1,20 +1,13 @@
 #pragma once
 #include <map>
 #include "Chat.h"
-#include "User.h"
+#include "IObserver.h"
 
-class Messages : private Chat		//все функции и поля класса доступны только для Chat
+class Messages		//все функции и поля класса доступны только для Chat
 {
-	public:				
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	std::multimap <User*, std::string>* _messages;	
+public:
+	virtual ~Messages() {};
+	Messages() {};
+	std::multimap <std::string, IObserver*> msg_{};
 };
 	

@@ -10,7 +10,7 @@ void ClientCode::start()
 	{
 		if (user == nullptr)
 		{
-			std::cout << "\nThere is no current user. ";
+			std::cout << "\nNo current User";
 		}
 		else
 		{
@@ -20,7 +20,7 @@ void ClientCode::start()
 				<< "\nuser_ID - " << user->get_userID();
 		}
 		std::cout << "\n\nSelect an action:" << std::endl;
-		std::cout << "1 - registration, 2 - authorization, 3 - send a message, ";
+		std::cout << "1 - registration, 2 - log in the chat, 3 - send a message, ";
 		std::cout << "\n4 - exit the chat,  5 - quit from the program: ";
 		char ch;
 		std::cin >> ch;
@@ -35,19 +35,25 @@ void ClientCode::start()
 		case '2':
 		{
 			chat->display_listObservers();
-			user = dynamic_cast <User*> (chat->log_in());
+			if (chat->is_Users())
+			{
+				user = user->log_in(chat);
+			}
+			else
+			{
+				std::cout << "\nUsers were not found!\nYou'll need to register in the chat!\n";
+			}			
 			break;
 		}
 		case '3':
 		{
 			if (user == nullptr)
 			{
-				std::cout << "\nYou have to log in!";
+				std::cout << "\nYou need to log in!";
 			}
 			else
 			{
-				std::cout << "message \n";
-				//user->send_message();
+				user->create_message();
 			}
 			break;
 		}
@@ -55,7 +61,7 @@ void ClientCode::start()
 		{
 			if (user == nullptr)
 			{
-				std::cout << "\nYou have to log in!";				
+				std::cout << "\nYou need to log in!";				
 			}
 			else
 			{

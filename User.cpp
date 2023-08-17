@@ -8,7 +8,9 @@ User::User(Chat* chat)
 	std::cout << "\nHi, You are new User \"" << ++User::static_counter << "\".";
 	user_ID_ = User::static_counter;
 	make_user();
+	chat_->set_User(this);
 	chat->attach(this);
+	set_isAutorization();
 }
 
 void User::make_user()
@@ -21,9 +23,77 @@ void User::make_user()
 	std::cin >> password_;
 }
 
-void User::update()
+User* User::log_in(Chat* chat)
 {
-	std::cout << "update \n";
+	std::string login;
+	std::cout << "\nEnter your username: ";
+	std::cin >> login;
+
+	std::string password;
+	std::cout << "Enter your password: ";
+	std::cin >> password;
+
+	User* user = dynamic_cast<User*> (chat->find_user(login));
+	if (user == nullptr)	
+	{
+		std::cout << "\nSuch user wasn't found! You'll need to register in the chat!\n";
+		return nullptr;
+	}
+	else
+	{		
+		if (chat->is_check_Observer(user, login, password))
+		{
+			if (user->is_autorization_)
+			{
+				std::cout << "\nYou are login!\n ";
+			}
+			else
+			{
+				chat->attach(user);
+			}
+			return user;
+		}
+		else
+		{
+			std::cout << "\nTry again!\n ";
+			return nullptr;
+		}		
+	}
+}
+
+void User::create_message() {
+	chat_->display_listObservers();
+
+	char event;
+	while (true)
+	{
+		std::cout << "\nEnter an action: s - send att all, c - chose some user, q - quit: ";		
+		std::cin >> event;
+
+		if (event == 'q')
+		{
+			//сбросить все символы из потока
+			std::cin.clear();
+			std::cin.ignore(32767, '\n');
+			return;
+		}
+		else if (event == 's' || event == 'c')
+		{
+			chat_->notify(this, event);
+		}		
+		else
+		{
+			std::cout << "\nTry agan!\n";
+		}
+		//сбросить все символы из потока
+		std::cin.clear();
+		std::cin.ignore(32767, '\n');
+	}	
+}
+
+void User::update(std::string message)
+{
+	messages_.push_back(message);
 }
 
 void User::leave_chat(Chat* chat)
@@ -31,32 +101,6 @@ void User::leave_chat(Chat* chat)
 	chat->detach(this);
 	set_notAutorization();
 	std::cout << "\nYou are detached from the chat!\n";
-}
-
-bool User::check_observer(std::string login, std::string password)
-{
-	if (login_ == login && password_ == password)
-	{
-		set_isAutorization();
-		return true;
-	}
-	else
-	{
-		return false;
-	}
-}
-
-std::map<std::string, std::string> User::get_dataObserver()
-{	
-	if (this != nullptr)
-	{
-		std::map<std::string, std::string> data_user;
-		data_user.insert(std::make_pair("name", get_name()));
-		data_user.insert(std::make_pair("login", get_login()));
-		data_user.insert(std::make_pair("password", get_password()));
-		return data_user;
-	}
-	return std::map<std::string, std::string>();
 }
 
 int User::static_counter = 0;
