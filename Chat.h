@@ -3,8 +3,9 @@
 #include <list>
 #include "ISubject.h"
 #include "IObserver.h"
+#include "Messages.h"
 
-class Messages;
+//class Messages;
 
 class Chat : public ISubject
 {

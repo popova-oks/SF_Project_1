@@ -1,6 +1,6 @@
 #pragma once
 #include <map>
-#include "Chat.h"
+//#include "Chat.h"
 #include "IObserver.h"
 
 class Messages
