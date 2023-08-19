@@ -10,6 +10,5 @@ public:
 	virtual void notify(IObserver* sender, char event) = 0;
 	virtual bool is_check_Observer(IObserver* observer, std::string login, std::string password) = 0;
 	virtual IObserver* find_user(std::string login) = 0;
-	virtual std::string show_Sender(std::string message) = 0;
 };
 

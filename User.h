@@ -36,8 +36,6 @@ private:
 	std::string password_{};
 	int user_ID_ {0};
 	bool is_autorization_{ false };
-
-	//std::list <std::string> messages_{};
 	std::multimap <IObserver*, std::string> messages_{};
 
 	static int static_counter;	

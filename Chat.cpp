@@ -35,36 +35,41 @@ void Chat::notify(IObserver* sender, char event)
 		return;
 	}
 	else
-	{
-		std::cout << "\nEnter your message: ";
-
-		//сбросить все символы из потока
-		std::cin.clear();
-		std::cin.ignore(32767, '\n');
-
-		std::string message;
-		//std::cin >> message;
-		std::getline(std::cin, message);
-
+	{		
 		if (messages_ == nullptr)
 		{
 			messages_ = new Messages;
 		}		
 		if (event == 's')
 		{
+			std::cout << "\nEnter your message: ";
+
+			// Очистить буфер ввода (удалить все символы до конца строки)
+			std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
+			
+			std::string message;
+			
+			//std::cin >> message;
+			std::getline(std::cin, message);
+
 			for (IObserver* user : list_observers_)
 			{
 				if (sender != user)
 				{
 					user->update(sender, message);
-					messages_->msg_.insert({ message, sender });
+					messages_->set_message(sender, message);
 				}
-			}			
-			std::cout << "Your messages are sending!\n";			
+			}
+
+			// Очистить буфер ввода (удалить все символы до конца строки)
+			std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
+
+			std::cout << "Your message is sending!\n";
+
 		}
 		else if (event == 'c')
 		{
-			std::cout << "Enter login to send message: ";
+			std::cout << "\nSend to a user. Enter login : ";
 			std::string login;
 			std::cin >> login;
 
@@ -75,27 +80,21 @@ void Chat::notify(IObserver* sender, char event)
 			}
 			else
 			{
+				std::cout << "\nEnter your message: ";
+
+				// Очистить буфер ввода (удалить все символы до конца строки)
+				std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
+
+				std::string message;
+				std::getline(std::cin, message);				
+
 				std::cout << "Your message is sending!\n";
+				
 				user->update(sender, message);
-				messages_->msg_.insert({ message, sender });
+				messages_->set_message(sender, message);
 			}			
 		}
 	}
-}
-
-std::string Chat::show_Sender(std::string message)
-{
-	IObserver* sender = messages_->get_Sender(message);
-	std::string str;
-	if (sender == nullptr)
-	{
-		str = "The sender is not found!";		
-	}
-	else
-	{
-		str = sender->get_login();
-	}
-	return str;
 }
 
 void Chat::detach(IObserver* observer)
@@ -149,7 +148,7 @@ bool Chat::is_check_Observer(IObserver* observer, std::string login, std::string
 				std::cout << "\nYour login or password are wrong! Try again.\n";
 				std::cout << "If you want to exit click: exit\n";
 
-				std::cout << "\nEnter your username: ";
+				std::cout << "\nEnter your login: ";
 				std::cin >> login;
 				if (login == "exit")
 				{

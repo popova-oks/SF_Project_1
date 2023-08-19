@@ -10,13 +10,17 @@ User::User(Chat* chat)
 
 User* User::log_in(Chat* chat)
 {
+	//сбросить все символы из потока
+	std::cin.clear();
+	std::cin.ignore(32767, '\n');
+
 	std::string login;
-	std::cout << "\nEnter your username: ";
+	std::cout << "\nEnter your login: ";
 	std::cin >> login;
 
 	std::string password;
 	std::cout << "Enter your password: ";
-	std::cin >> password;
+	std::cin >> password;	
 
 	User* user = dynamic_cast<User*> (chat->find_user(login));
 	if (user == nullptr)	
@@ -50,7 +54,11 @@ void User::create_message() {
 	char event;
 	while (true)
 	{
-		std::cout << "\nEnter an action: s - send to all users, c - chose some user, q - quit: ";		
+		//сбросить все символы из потока
+		std::cin.clear();
+		std::cin.ignore(32767, '\n');
+
+		std::cout << "\nEnter an action: s - send to all users, c - chose some user, q - quit: ";	
 		std::cin >> event;
 
 		if (event == 'q')
