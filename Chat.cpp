@@ -38,7 +38,7 @@ void Chat::notify(IObserver* sender, char event)
 	{		
 		if (messages_ == nullptr)
 		{
-			messages_ = new Messages;
+			messages_ = new Messages<std::string>;
 		}		
 		if (event == 's')
 		{
@@ -49,7 +49,6 @@ void Chat::notify(IObserver* sender, char event)
 			
 			std::string message;
 			
-			//std::cin >> message;
 			std::getline(std::cin, message);
 
 			for (IObserver* user : list_observers_)

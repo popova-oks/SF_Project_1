@@ -5,8 +5,6 @@
 #include "IObserver.h"
 #include "Messages.h"
 
-//class Messages;
-
 class Chat : public ISubject
 {
 public:
@@ -27,5 +25,5 @@ public:
 private:
 	std::vector <IObserver*> all_users_{};
 	std::list<IObserver*> list_observers_{};
-	Messages* messages_ = nullptr;
+	Messages<std::string>* messages_ = nullptr;
 };

@@ -83,7 +83,7 @@ void User::display_Messages()
 	{
 		std::cout << "No messages!\n";
 	}
-	for (auto msg : messages_)
+	for (std::pair <IObserver*, std::string> msg : messages_)
 	{
 			std::cout << "The message received from user: "  << msg.first->get_login() << "\n";
 			std::cout << "The message: "<< msg.second << "\n\n";
