@@ -61,11 +61,7 @@ void Chat::notify(IObserver* sender, char event)
 				}
 			}
 
-			// Очистить буфер ввода (удалить все символы до конца строки)
-			std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
-
 			std::cout << "Your message is sending!\n";
-
 		}
 		else if (event == 'c')
 		{

@@ -54,10 +54,6 @@ void User::create_message() {
 	char event;
 	while (true)
 	{
-		//сбросить все символы из потока
-		std::cin.clear();
-		std::cin.ignore(32767, '\n');
-
 		std::cout << "\nEnter an action: s - send to all users, c - chose some user, q - quit: ";	
 		std::cin >> event;
 
