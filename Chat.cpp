@@ -30,25 +30,21 @@ void Chat::attach(IObserver* observer)
 
 void Chat::notify(IObserver* sender, char event)
 {
-	if (list_observers_.empty())
+	if (!list_observers_.empty())
 	{
-		return;
-	}
-	else
-	{		
 		if (messages_ == nullptr)
 		{
 			messages_ = new Messages<std::string>;
-		}		
+		}
 		if (event == 's')
 		{
 			std::cout << "\nEnter your message: ";
 
 			// Очистить буфер ввода (удалить все символы до конца строки)
 			std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
-			
+
 			std::string message;
-			
+
 			std::getline(std::cin, message);
 
 			for (IObserver* user : list_observers_)
@@ -81,13 +77,13 @@ void Chat::notify(IObserver* sender, char event)
 				std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
 
 				std::string message;
-				std::getline(std::cin, message);				
+				std::getline(std::cin, message);
 
 				std::cout << "Your message is sending!\n";
-				
+
 				user->update(sender, message);
 				messages_->set_message(sender, message);
-			}			
+			}
 		}
 	}
 }

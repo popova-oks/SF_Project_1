@@ -1,8 +1,21 @@
 #include "ClientCode.h"
+#include <exception>
+#include <algorithm>
 
 void ClientCode::start()
 {
-	Chat* chat = new Chat();
+	std::cin.exceptions(std::istream::failbit);					//включаем режим генерации исключений при ошибках ввода
+
+	Chat* chat = nullptr;
+	try
+	{
+		chat = new Chat();
+	}
+	catch (const std::bad_alloc& ex)
+	{
+
+		std::cout << "Allocation failed: " << ex.what() << '\n';
+	}
 	User* user = nullptr;
 	bool flag = true;
 
@@ -43,7 +56,7 @@ void ClientCode::start()
 			else
 			{
 				std::cout << "\nUsers were not found!\nYou'll need to register in the chat!\n";
-			}			
+			}
 			break;
 		}
 		case '3':
@@ -62,7 +75,7 @@ void ClientCode::start()
 				else
 				{
 					std::cout << "\nNo authorized users!\n";
-				}				
+				}
 			}
 			break;
 		}
@@ -70,11 +83,11 @@ void ClientCode::start()
 		{
 			if (user == nullptr)
 			{
-				std::cout << "\nYou need to log in!";				
+				std::cout << "\nYou need to log in!";
 			}
 			else
 			{
-				user->leave_chat(chat);	
+				user->leave_chat(chat);
 				user = nullptr;
 			}
 			break;
@@ -101,35 +114,86 @@ void ClientCode::start()
 
 User* ClientCode::make_user(Chat* chat)
 {
-	std::string name;
-	std::cout << "\nEnter your name: ";
-	std::cin >> name;
-
-	std::string login;
-	std::cout << "Enter your username: ";
-	std::cin >> login;
-
-	std::string password;
-	std::cout << "Enter your password: ";
-	std::cin >> password;
-
-	User* user = dynamic_cast<User*> (chat->find_user(login));
-
-	if (user != nullptr)
+	try
 	{
-		std::cout << "\nThis user was registrated!\n";
+		std::string name;
+		std::string login;
+		std::string password;
+		bool OnlyLettersNum = false;
+		while (!OnlyLettersNum)
+		{
+			std::cout << "\nEnter only letters or numbers without using spaces or other symbols!\n";
+			
+			std::cout << "Enter your name: ";
+			std::cin >> name;
+			OnlyLettersNum = containsOnlyLettersNum(name);
+			if (!OnlyLettersNum)
+			{
+				continue;
+			}
+			
+			std::cout << "Enter your username: ";
+			std::cin >> login;
+			OnlyLettersNum = containsOnlyLettersNum(login);
+			if (!OnlyLettersNum)
+			{
+				continue;
+			}
+			
+			std::cout << "Enter your password: ";
+			std::cin >> password;
+			OnlyLettersNum = containsOnlyLettersNum(password);
+			if (!OnlyLettersNum)
+			{
+				continue;
+			}
+		}
+
+
+		User* user = dynamic_cast<User*> (chat->find_user(login));
+
+		if (user != nullptr)
+		{
+			std::cout << "\nThis user was registrated!\n";
+		}
+		else
+		{
+			try
+			{
+				user = new User(chat);
+			}
+			catch (const std::bad_alloc& ex)
+			{
+
+				std::cout << "Allocation failed: " << ex.what() << '\n';
+			}
+			user->set_name(name);
+			user->set_login(login);
+			user->set_password(password);
+			user->set_userID();
+			user->set_isAutorization();
+			std::cout << "\nHi, You are new User! name - " << user->get_name() << " : " << "ID - " << user->get_userID();
+			chat->attach(user);
+		}
+		return user;
 	}
-	else
+	catch (const std::istream::failure& ex) 
 	{
-		user = new User(chat);
-		
-		user->set_name (name);
-		user->set_login(login);
-		user->set_password (password);
-		user->set_userID ();
-		user->set_isAutorization();
-		std::cout << "\nHi, You are new User! name - " << user->get_name() << " : " <<"ID - " << user->get_userID();
-		chat->attach(user);
+		std::cerr << "Failed to input: " << ex.what() << "\n";
 	}
-	return user;
+	catch (...) 
+	{
+		std::cerr << "Some other exception\n";
+	}
 }
+
+bool ClientCode::containsOnlyLettersNum(std::string const &str)
+{
+	return std::all_of(str.begin(), str.end(), 
+		[](char const& c)
+		{
+			return std::isalnum(c); 
+		});
+}
+
+
