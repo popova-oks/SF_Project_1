@@ -72,7 +72,7 @@ void User::create_message() {
 	}	
 }
 
-void User::update(IObserver* sender, std::string message)
+void User::update(IObserver* sender, const std::string& message)
 {
 	messages_.insert({ sender, message });
 }
@@ -83,7 +83,7 @@ void User::display_Messages()
 	{
 		std::cout << "No messages!\n";
 	}
-	for (std::pair <IObserver*, std::string> msg : messages_)
+	for (std::pair <const IObserver*, const std::string&> msg : messages_)
 	{
 			std::cout << "The message received from user: "  << msg.first->get_login() << "\n";
 			std::cout << "The message: "<< msg.second << "\n\n";

@@ -5,10 +5,10 @@
 class IObserver {
 public:
 	virtual ~IObserver() {};
-	virtual void update(IObserver* sender, std::string message) = 0;
+	virtual void update(IObserver* sender, const std::string& message) = 0;
 
-	virtual std::string& get_name() = 0;
-	virtual std::string& get_login() = 0;
-	virtual std::string& get_password() = 0;
-	virtual int get_userID() = 0;
+	virtual const std::string& get_name() const = 0;
+	virtual const std::string& get_login() const = 0;
+	virtual const std::string& get_password() const = 0;
+	virtual const int get_userID() const = 0;
 };

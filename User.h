@@ -9,12 +9,12 @@ public:
 	User(Chat* chat);
 	virtual ~User() {}
 	
-	void update(IObserver* sender, std::string message) override;
+	void update(IObserver* sender, const std::string& message) override;
 
-	std::string& get_name() override { return name_; }
-	std::string& get_login() override { return login_; }
-	std::string& get_password() override { return password_; }
-	int get_userID() override { return user_ID_; }	
+	const std::string& get_name() const override { return name_; }
+	const std::string& get_login() const override { return login_; }
+	const std::string& get_password() const override { return password_; }
+	const int get_userID() const override { return user_ID_; }	
 	
 	//функции для ClientCode	
 	User* log_in(Chat* chat);
@@ -22,9 +22,9 @@ public:
 	void leave_chat(Chat* chat);
 	void display_Messages();
 
-	void set_name(std::string name) { name_ = name; }
-	void set_login(std::string login) { login_ = login; }
-	void set_password(std::string password) { password_ = password; }
+	void set_name(const std::string name) { name_ = name; }
+	void set_login(const std::string login) { login_ = login; }
+	void set_password(const std::string password) { password_ = password; }
 	void set_userID() { user_ID_ = ++static_counter; }
 	void set_isAutorization() { is_autorization_ = true; }
 	void set_notAutorization() { is_autorization_ = false; }
@@ -36,7 +36,7 @@ private:
 	std::string password_{};
 	int user_ID_ {0};
 	bool is_autorization_{ false };
-	std::multimap <IObserver*, std::string> messages_{};
+	std::multimap <IObserver*, const std::string> messages_{};
 
 	static int static_counter;	
 };
