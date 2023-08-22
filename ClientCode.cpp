@@ -51,7 +51,10 @@ void ClientCode::start()
 			if (chat->is_Users())
 			{
 				user = user->log_in(chat);
-				user->display_Messages();
+				if (user != nullptr)
+				{
+					user->display_Messages();
+				}
 			}
 			else
 			{
